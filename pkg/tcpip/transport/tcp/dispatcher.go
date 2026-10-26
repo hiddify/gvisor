@@ -152,6 +152,12 @@ func handleConnecting(ep *Endpoint) {
 		ep.mu.Unlock()
 		return
 	}
+	// H: a failed handshake sets ep.h to nil and unlocks before Close moves the endpoint out of
+	// the connecting states, so a segment in that window finds no handshake; Close cleans up.
+	if ep.h == nil {
+		ep.mu.Unlock()
+		return
+	}
 	if err := ep.h.processSegments(); err != nil {
 		// handshake failed. clean up the tcp endpoint and handshake
 		// state.
