@@ -1637,7 +1637,6 @@ func (s *StatCounter) Value() uint64 {
 
 // IncrementBy increments the counter by v.
 func (s *StatCounter) IncrementBy(v uint64) {
-	s.count.Add(v)
 }
 
 func (s *StatCounter) String() string {
